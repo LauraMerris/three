@@ -1,12 +1,10 @@
 <html>
 	<head>
 		<title>My first three.js app</title>
-		<style>
-			body { margin: 0; }
-			canvas { width: 100%; height: 100% }
-		</style>
+		<link rel="stylesheet" type="text/css" href="styles.css" />
 	</head>
 	<body>
+		<div id="announcement">The amazing wonder cube is HERE!</div>
 		<script src="../js/three.js"></script>
 		<script>
 			var scene = new THREE.Scene();
@@ -16,12 +14,32 @@
 			renderer.setSize( window.innerWidth, window.innerHeight );
 			document.body.appendChild( renderer.domElement );
 
-			var geometry = new THREE.BoxGeometry( 2, 2, 2 );
-			var material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
+			var geometry = new THREE.BoxGeometry( 1, 1, 1 );
+			var material = new THREE.MeshLambertMaterial( { color: 0xffffff } );
 			var cube = new THREE.Mesh( geometry, material );
-			scene.add( cube );
 
-			camera.position.z = 5;
+			/* change the vertices */
+
+			for (var i = 0, l = geometry.vertices.length; i<l; i++) {
+    			// we'll move the x & y position of each vertice by a random amount
+  				geometry.vertices[i].x += Math.random();
+  				geometry.vertices[i].y += Math.random();
+			}
+
+			scene.add(cube);
+
+			/* lighting */
+			/* add two point lights of different colours */
+
+			var light = new THREE.PointLight(0x6fb5fc);
+			light.position.set(2, 2, 2);
+			scene.add(light);
+
+			var light2 = new THREE.PointLight(0xf77a45);
+			light2.position.set(-2, -2, 2);
+			scene.add(light2);
+
+			camera.position.z = 4;
 
 			var animate = function () {
 				requestAnimationFrame( animate );
