@@ -4,53 +4,97 @@
 		<link rel="stylesheet" type="text/css" href="styles.css" />
 	</head>
 	<body>
-		<div id="announcement">The amazing wonder cube is HERE!</div>
+		<div id="announcement">The amazing wonder shapes are HERE!</div>
 		<script src="../js/three.js"></script>
 		<script>
+
+			/* ---------------------- colors ------------------------------*/
+
+			var orange = new THREE.Color("#f77a45");
+			var blue = new THREE.Color("#6fb5fc");
+			var white = new THREE.Color("#ffffff");
+			var purple = new THREE.Color("#7833aa");
+			var pink = new THREE.Color("#fc97d6");
+			var dkgrey = new THREE.Color("#636363");
+
 			var scene = new THREE.Scene();
 			var camera = new THREE.PerspectiveCamera( 75, window.innerWidth/window.innerHeight, 0.1, 1000 );
+			camera.position.z = 7;
+
+			/* -------------------- set up renderer ---------------------- */
 
 			var renderer = new THREE.WebGLRenderer();
 			renderer.setSize( window.innerWidth, window.innerHeight );
 			document.body.appendChild( renderer.domElement );
 
-			var geometry = new THREE.BoxGeometry( 1, 1, 1 );
-			var material = new THREE.MeshLambertMaterial( { color: 0xffffff } );
-			var cube = new THREE.Mesh( geometry, material );
+
+			/* -------------------- dev helpers ------------------*/
+			
+			/*
+			var axesHelper = new THREE.AxesHelper( 5 );
+			scene.add( axesHelper );
+			*/
+
+
+            /* --------------------- assets ---------------------- */
+
+			var geometry = new THREE.OctahedronBufferGeometry();
+			var material = new THREE.MeshPhongMaterial( { color: white.getHex(), specular: 0x009900, shinyness: 20 } );
+			var diamond = new THREE.Mesh( geometry, material );
+			diamond.scale.y += 0.5;
 
 			/* change the vertices */
-
+			/*
 			for (var i = 0, l = geometry.vertices.length; i<l; i++) {
     			// we'll move the x & y position of each vertice by a random amount
   				geometry.vertices[i].x += Math.random();
   				geometry.vertices[i].y += Math.random();
 			}
+			*/
+			scene.add(diamond);
+			
+			var geometry = new THREE.OctahedronBufferGeometry(0.8);
+			var material = new THREE.MeshPhongMaterial( { color: white.getHex(), specular: 0x009900, shinyness: 20 } );
+			var tetra2 = new THREE.Mesh( geometry, material );
+			tetra2.position.set(2,-0.8,-2);
+			scene.add(tetra2);
 
-			scene.add(cube);
+			var geometry = new THREE.OctahedronBufferGeometry(0.8);
+			var material = new THREE.MeshPhongMaterial( { color: white.getHex(), specular: 0x009900, shinyness: 20 } );
+			var tetra3 = new THREE.Mesh( geometry, material );
+			tetra3.position.set(-2,-0.8,-2);
+			scene.add(tetra3);
 
-			/* lighting */
-			/* add two point lights of different colours */
 
-			var light = new THREE.PointLight(0x6fb5fc);
-			light.position.set(2, 2, 2);
+			/* ---------------- lighting ------------------- */
+
+			/* adds two point lights of different colours */
+
+			var light = new THREE.PointLight(pink.getHex());
+			light.position.set(2, 2, 1);
 			scene.add(light);
 
-			var light2 = new THREE.PointLight(0xf77a45);
+			var light2 = new THREE.PointLight(purple.getHex());
 			light2.position.set(-2, -2, 2);
 			scene.add(light2);
-
-			camera.position.z = 4;
 
 			var animate = function () {
 				requestAnimationFrame( animate );
 
-				cube.rotation.x += 0.01;
-				cube.rotation.y += 0.01;
+				//cube.rotation.x += 0.01;
+				diamond.rotation.y += 0.01;
+				tetra2.rotation.y += 0.005;
+				tetra3.rotation.y += 0.005;
+
+				if (camera.position.z > 4){
+					camera.translateZ(-0.02);
+				}
 
 				renderer.render( scene, camera );
 			};
 
 			animate();
+
 		</script>
 	</body>
 </html>
